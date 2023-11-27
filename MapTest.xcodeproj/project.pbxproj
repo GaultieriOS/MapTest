@@ -14,6 +14,7 @@
 		7B6331812B10EA210080E496 /* MapTestTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B6331802B10EA210080E496 /* MapTestTests.swift */; };
 		7B63318B2B10EA210080E496 /* MapTestUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B63318A2B10EA210080E496 /* MapTestUITests.swift */; };
 		7B63318D2B10EA210080E496 /* MapTestUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B63318C2B10EA210080E496 /* MapTestUITestsLaunchTests.swift */; };
+		7B63319A2B10EA410080E496 /* ApplicationData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B6331992B10EA410080E496 /* ApplicationData.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,6 +46,7 @@
 		7B6331862B10EA210080E496 /* MapTestUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MapTestUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7B63318A2B10EA210080E496 /* MapTestUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapTestUITests.swift; sourceTree = "<group>"; };
 		7B63318C2B10EA210080E496 /* MapTestUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapTestUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		7B6331992B10EA410080E496 /* ApplicationData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationData.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,6 +99,7 @@
 			children = (
 				7B63316E2B10EA1F0080E496 /* MapTestApp.swift */,
 				7B6331702B10EA1F0080E496 /* ContentView.swift */,
+				7B6331992B10EA410080E496 /* ApplicationData.swift */,
 				7B6331722B10EA210080E496 /* Assets.xcassets */,
 				7B6331742B10EA210080E496 /* MapTest.entitlements */,
 				7B6331752B10EA210080E496 /* Preview Content */,
@@ -259,6 +262,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7B63319A2B10EA410080E496 /* ApplicationData.swift in Sources */,
 				7B6331712B10EA1F0080E496 /* ContentView.swift in Sources */,
 				7B63316F2B10EA1F0080E496 /* MapTestApp.swift in Sources */,
 			);
@@ -424,6 +428,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "On a besoin de votre localisation pour que ça marche";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -462,6 +467,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "On a besoin de votre localisation pour que ça marche";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
