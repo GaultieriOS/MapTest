@@ -15,6 +15,8 @@
 		7B63318B2B10EA210080E496 /* MapTestUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B63318A2B10EA210080E496 /* MapTestUITests.swift */; };
 		7B63318D2B10EA210080E496 /* MapTestUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B63318C2B10EA210080E496 /* MapTestUITestsLaunchTests.swift */; };
 		7B63319A2B10EA410080E496 /* ApplicationData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B6331992B10EA410080E496 /* ApplicationData.swift */; };
+		7B63319C2B15E4FC0080E496 /* SheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B63319B2B15E4FC0080E496 /* SheetView.swift */; };
+		7B63319E2B15E6150080E496 /* LocationCompleter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B63319D2B15E6150080E496 /* LocationCompleter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +49,8 @@
 		7B63318A2B10EA210080E496 /* MapTestUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapTestUITests.swift; sourceTree = "<group>"; };
 		7B63318C2B10EA210080E496 /* MapTestUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapTestUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		7B6331992B10EA410080E496 /* ApplicationData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationData.swift; sourceTree = "<group>"; };
+		7B63319B2B15E4FC0080E496 /* SheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetView.swift; sourceTree = "<group>"; };
+		7B63319D2B15E6150080E496 /* LocationCompleter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationCompleter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,7 +103,9 @@
 			children = (
 				7B63316E2B10EA1F0080E496 /* MapTestApp.swift */,
 				7B6331702B10EA1F0080E496 /* ContentView.swift */,
+				7B63319B2B15E4FC0080E496 /* SheetView.swift */,
 				7B6331992B10EA410080E496 /* ApplicationData.swift */,
+				7B63319D2B15E6150080E496 /* LocationCompleter.swift */,
 				7B6331722B10EA210080E496 /* Assets.xcassets */,
 				7B6331742B10EA210080E496 /* MapTest.entitlements */,
 				7B6331752B10EA210080E496 /* Preview Content */,
@@ -264,6 +270,8 @@
 			files = (
 				7B63319A2B10EA410080E496 /* ApplicationData.swift in Sources */,
 				7B6331712B10EA1F0080E496 /* ContentView.swift in Sources */,
+				7B63319E2B15E6150080E496 /* LocationCompleter.swift in Sources */,
+				7B63319C2B15E4FC0080E496 /* SheetView.swift in Sources */,
 				7B63316F2B10EA1F0080E496 /* MapTestApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
