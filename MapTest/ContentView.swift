@@ -8,10 +8,12 @@
 import SwiftUI
 import MapKit
 import CoreLocationUI
+import Combine
 
 struct ContentView: View {
     
     @ObservedObject var applicationData = ApplicationData()
+    @State var cancellables: Set<AnyCancellable> = []
     
     var body: some View {
         VStack{
@@ -30,9 +32,7 @@ struct ContentView: View {
                 MapUserLocationButton()
             }
             .onMapCameraChange { context in
-                Task {
-                    await applicationData.setAnnotations(region:context.region, search: applicationData.searchText)
-                }
+                applicationData.testCombine(region: context.region, searchText: applicationData.searchText)
             }
             .sheet(isPresented: $applicationData.isSearching){
                 SheetView(applicationData: applicationData)
@@ -58,10 +58,11 @@ struct ContentView: View {
             }
             .onChange(of: applicationData.selectedLocation) {
                 if let selectedLocation = applicationData.selectedLocation {
-                    Task {
-                        applicationData.scene = try? await applicationData.fetchScene(for: selectedLocation.location)
-                    }
-                    applicationData.fetchRouteFrom(applicationData.userLocation!, to: applicationData.selectedLocation!.location)
+                    applicationData.fetchRouteAndScene(selectedLocation: selectedLocation)
+//                    Task {
+//                        applicationData.scene = try? await applicationData.fetchScene(for: selectedLocation.location)
+//                        
+//                    }
                 }
                 applicationData.updateIsSearching()
             }

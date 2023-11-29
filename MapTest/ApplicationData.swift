@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 import MapKit
+import Combine
 
 struct SearchCompletions: Identifiable {
     let id = UUID()
@@ -65,6 +66,8 @@ class ApplicationData: NSObject, ObservableObject, CLLocationManagerDelegate {
     let gradient = LinearGradient(colors: [.red, .orange], startPoint: .leading, endPoint: .trailing)
     let stroke = StrokeStyle(lineWidth: 5, lineCap: .round, lineJoin: .round, dash: [8, 8])
     
+    var cancellables: Set<AnyCancellable> = []
+    
     
     override init() {
         super.init()
@@ -109,6 +112,22 @@ class ApplicationData: NSObject, ObservableObject, CLLocationManagerDelegate {
         }
 
         return uniqueResults
+    }
+    
+    func testCombine(region: MKCoordinateRegion, searchText: String){
+//        self.objectWillChange
+//            .sink {
+                Task {
+                    await self.setAnnotations(region: region, search: searchText)
+                }
+//            }
+//            .store(in: &cancellables)
+    }
+    
+    func fetchRouteAndScene(selectedLocation: SearchResult){
+        Task{
+            self.fetchRouteFrom(self.userLocation!, to: selectedLocation.location)
+        }
     }
     
     func grantUserAuthorization(){
