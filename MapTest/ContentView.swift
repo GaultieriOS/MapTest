@@ -15,25 +15,30 @@ struct ContentView: View {
     
     var body: some View {
         VStack{
-
             Map(initialPosition: .automatic, selection: $applicationData.selectedLocation){
-                    ForEach(applicationData.annotations){ place in
-                        Marker(place.name, coordinate: place.location)
-                            .tag(place)
-                    }
+                ForEach(applicationData.annotations){ place in
+                    Marker(place.name, coordinate: place.location)
+                        .tag(place)
                 }
-                .mapControls {
-                    MapUserLocationButton()
+                if let route = applicationData.route {
+                    MapPolyline(route.polyline)
+                        .stroke(.blue, lineWidth: 6)
+                        .stroke(applicationData.gradient, style: applicationData.stroke)
                 }
-                .onMapCameraChange { context in
-                    Task {
-                        await applicationData.setAnnotations(region:context.region, search: applicationData.searchText)
-                    }
+            }
+            .mapControls {
+                MapUserLocationButton()
+            }
+            .onMapCameraChange { context in
+                Task {
+                    await applicationData.setAnnotations(region:context.region, search: applicationData.searchText)
                 }
-                .sheet(isPresented: $applicationData.isSearching){
-                    SheetView(applicationData: applicationData)
-                }
-                .overlay(alignment: .bottom){
+            }
+            .sheet(isPresented: $applicationData.isSearching){
+                SheetView(applicationData: applicationData)
+            }
+            .overlay(alignment: .bottom){
+                HStack{
                     if applicationData.selectedLocation != nil{
                         LookAroundPreview(scene: $applicationData.scene, allowsNavigation: false, badgePosition: .bottomTrailing)
                             .frame(height: 150)
@@ -41,23 +46,33 @@ struct ContentView: View {
                             .safeAreaPadding(.bottom, 40)
                             .padding(.horizontal, 20)
                     }
-                }
-                .onChange(of: applicationData.selectedLocation) {
-                    if let selectedLocation = applicationData.selectedLocation {
-                        Task {
-                            applicationData.scene = try? await applicationData.fetchScene(for: selectedLocation.location)
-                        }
+                    if let travelTime = applicationData.travelTime{
+                        Text("Travel time: \(travelTime)")
+                            .padding()
+                            .font(.headline)
+                            .foregroundStyle(.black)
+                            .background(.ultraThinMaterial)
+                            .cornerRadius(15)
                     }
-                    applicationData.updateIsSearching()
                 }
-                .onChange(of: applicationData.searchResults) {
-                    if let firstResult = applicationData.searchResults.first, applicationData.searchResults.count == 1 {
-                                applicationData.selectedLocation = firstResult
-                            }
-                        }
-            }.onAppear {
-                applicationData.grantUserAuthorization()
             }
+            .onChange(of: applicationData.selectedLocation) {
+                if let selectedLocation = applicationData.selectedLocation {
+                    Task {
+                        applicationData.scene = try? await applicationData.fetchScene(for: selectedLocation.location)
+                    }
+                    applicationData.fetchRouteFrom(applicationData.userLocation!, to: applicationData.selectedLocation!.location)
+                }
+                applicationData.updateIsSearching()
+            }
+            .onChange(of: applicationData.searchResults) {
+                if let firstResult = applicationData.searchResults.first, applicationData.searchResults.count == 1 {
+                    applicationData.selectedLocation = firstResult
+                }
+            }
+        }.onAppear {
+            applicationData.grantUserAuthorization()
+        }
     }
 }
 

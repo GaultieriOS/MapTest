@@ -9,7 +9,6 @@ import SwiftUI
 import MapKit
 
 struct SheetView: View {
-    // 1
     @State private var locationService = LocationService(completer: .init())
     @ObservedObject var applicationData : ApplicationData
     
@@ -20,8 +19,7 @@ struct SheetView: View {
                 TextField("Search for a restaurant", text: $applicationData.search)
                     .autocorrectionDisabled()
                     .onSubmit {
-                        Task {
-
+                        Task(priority: .userInitiated) {
                             applicationData.annotations = (try? await locationService.search(with: applicationData.search)) ?? []
                         }
                     }
@@ -62,7 +60,7 @@ struct SheetView: View {
     }
     
     private func didTapOnCompletion(_ completion: SearchCompletions) {
-        Task {
+        Task(priority: .userInitiated) {
             if let singleLocation = try await locationService.search(with: "\(completion.title)").first {
                 applicationData.annotations = [singleLocation]
                 applicationData.selectedLocation = applicationData.annotations.first

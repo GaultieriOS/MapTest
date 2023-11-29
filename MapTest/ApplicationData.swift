@@ -56,8 +56,14 @@ class ApplicationData: NSObject, ObservableObject, CLLocationManagerDelegate {
     @Published var search: String = ""
     @Published var scene: MKLookAroundScene?
     
+    @Published var userLocation: CLLocationCoordinate2D?
+    @Published var route: MKRoute?
+    @Published var travelTime: String?
+    
     var searchText : String = ""
     let manager = CLLocationManager()
+    let gradient = LinearGradient(colors: [.red, .orange], startPoint: .leading, endPoint: .trailing)
+    let stroke = StrokeStyle(lineWidth: 5, lineCap: .round, lineJoin: .round, dash: [8, 8])
     
     
     override init() {
@@ -77,14 +83,32 @@ class ApplicationData: NSObject, ObservableObject, CLLocationManagerDelegate {
             
            await MainActor.run {
                 annotations = []
+               if let selected = selectedLocation{
+                   annotations.append(selected)
+               }
                 for item in items {
                     if let location = item.placemark.location?.coordinate{
                         let place = SearchResult(name: item.name ?? "Undefined", location: location, url: item.url)
                         annotations.append(place)
                     }
                 }
+               annotations = removeDuplicates(annotations)
            }
         }
+    }
+    
+    func removeDuplicates(_ array: [SearchResult]) -> [SearchResult] {
+        var uniqueNames: Set<CLLocationCoordinate2D> = []
+        var uniqueResults: [SearchResult] = []
+
+        for result in array {
+            if !uniqueNames.contains(result.location) {
+                uniqueNames.insert(result.location)
+                uniqueResults.append(result)
+            }
+        }
+
+        return uniqueResults
     }
     
     func grantUserAuthorization(){
@@ -98,6 +122,7 @@ class ApplicationData: NSObject, ObservableObject, CLLocationManagerDelegate {
     
     func updateIsSearching(){
         isSearching = selectedLocation == nil
+        route = nil
     }
     
     func fetchScene(for coordinate: CLLocationCoordinate2D) async throws -> MKLookAroundScene? {
@@ -106,6 +131,7 @@ class ApplicationData: NSObject, ObservableObject, CLLocationManagerDelegate {
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]){
+        userLocation = locations.first?.coordinate
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error){
@@ -113,9 +139,35 @@ class ApplicationData: NSObject, ObservableObject, CLLocationManagerDelegate {
         print(error.localizedDescription)
     }
     
+    func fetchRouteFrom(_ source: CLLocationCoordinate2D, to destination: CLLocationCoordinate2D) {
+        let request = MKDirections.Request()
+        request.source = MKMapItem(placemark: MKPlacemark(coordinate: source))
+        request.destination = MKMapItem(placemark: MKPlacemark(coordinate: destination))
+        request.transportType = .automobile
+        
+        Task(priority: .userInitiated) {
+            let result = try? await MKDirections(request: request).calculate()
+            route = result?.routes.first
+            getTravelTime()
+        }
+    }
+    
+    func getTravelTime() {
+        guard let route else { return }
+        let formatter = DateComponentsFormatter()
+        formatter.unitsStyle = .abbreviated
+        formatter.allowedUnits = [.hour, .minute]
+        travelTime = formatter.string(from: route.expectedTravelTime)
+    }
 }
 
-extension CLLocationCoordinate2D: Equatable {
+
+extension CLLocationCoordinate2D: Equatable, Hashable {
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(latitude)
+        hasher.combine(longitude)
+    }
+
     public static func == (lhs: CLLocationCoordinate2D, rhs: CLLocationCoordinate2D) -> Bool {
         return lhs.latitude == rhs.latitude && lhs.longitude == rhs.longitude
     }
